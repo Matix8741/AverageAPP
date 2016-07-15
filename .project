@@ -20,4 +20,16 @@
 		<nature>org.eclipse.xtext.ui.shared.xtextNature</nature>
 		<nature>org.eclipse.jdt.core.javanature</nature>
 	</natures>
+	<linkedResources>
+		<link>
+			<name>icon.png</name>
+			<type>1</type>
+			<location>C:/Users/Mateusz/Documents/icon.png</location>
+		</link>
+		<link>
+			<name>src/application/icon.png</name>
+			<type>1</type>
+			<location>C:/Users/Mateusz/Documents/icon.png</location>
+		</link>
+	</linkedResources>
 </projectDescription>

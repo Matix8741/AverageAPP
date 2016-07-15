@@ -1,40 +1,64 @@
 package application;
 	
+import java.util.ArrayList;
+
 import Calculate.Average;
 import Calculate.Mark;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.Insets;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 
 
 public class Main extends Application {
-	HBox hbox;
-	TextField textfields[];
+	public int amount_fields = 4;
+	VBox vbox;
+	BorderPane botton_panel;
+	BorderPane front;
+	ArrayList<TextField> textfields;
 	Scene scene;
 	Label result;
-	Button go;
+	Button go, add;
 	@Override
 	public void start(Stage primaryStage) {
+		primaryStage.getIcons().add(new Image(Main.class.getResourceAsStream("icon.png")));
 		try {
+			add = new Button("add");
+			front = new BorderPane();
+			botton_panel = new BorderPane();
 			go = new Button("GO");
 			result = new Label();
-			hbox = new HBox();
-			textfields = new TextField[4];
-			for(int i =0; i<textfields.length; i++) {
-				textfields[i] = new TextField();
-				hbox.getChildren().add(textfields[i]);
+			vbox = new VBox();
+			vbox.setPadding(new Insets(10));
+			vbox.setSpacing(8);
+			textfields = new ArrayList<>();
+			for(int i =0; i<amount_fields; i++) {
+				textfields.add(new TextField());
+				textfields.get(textfields.size()-1).setMaxWidth(50);
+				textfields.get(textfields.size()-1).setPrefHeight(21);
+				//vbox.setMargin(textfields[i],new Insets(0, 0, 0, 8));
+				vbox.getChildren().add(textfields.get(textfields.size()-1));
 			}
+			vbox.getChildren().add(add);
 			result.setText("jestem");
-			hbox.getChildren().add(result);
-			hbox.getChildren().add(go);
-			hbox.setSpacing(10);
-			scene = new Scene(hbox,400,400);
+			vbox.setSpacing(10);
+			front.setLeft(vbox);
+			front.setMaxWidth(120);
+			front.setMaxHeight(120);
+			botton_panel.setLeft(result);
+			botton_panel.setPadding(new Insets(9));
+			botton_panel.setRight(go);
+			front.setBottom(botton_panel);
+			scene = new Scene(front,40,230);
 			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 			primaryStage.setScene(scene);
 			primaryStage.show();
@@ -45,12 +69,12 @@ public class Main extends Application {
 			
 			@Override
 			public void handle(ActionEvent event) {
-				Mark[] marks = new Mark[textfields.length];
+				Mark[] marks = new Mark[textfields.size()];
 				for(int i =0; i< marks.length;i++) {
 					double for_now=0;
-					if ((textfields[i].getText() != null && !textfields[i].getText().isEmpty())){
-						System.out.println(textfields[i].getText());
-						try{for_now = Double.parseDouble(textfields[i].getText()); }
+					if ((textfields.get(i).getText() != null && !textfields.get(i).getText().isEmpty())){
+						System.out.println(textfields.get(i).getText());
+						try{for_now = Double.parseDouble(textfields.get(i).getText()); }
 						catch(NumberFormatException e) {
 								System.out.println("nie dziala");
 							}
