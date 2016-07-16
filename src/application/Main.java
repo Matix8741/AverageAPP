@@ -15,12 +15,12 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
 
 public class Main extends Application {
-	public int amount_fields = 4;
+	public int amount_fields = 0;
+	public int height = 110;
 	VBox vbox;
 	BorderPane botton_panel;
 	BorderPane front;
@@ -28,12 +28,23 @@ public class Main extends Application {
 	Scene scene;
 	Label result;
 	Button go, add;
+	private void add_field(ArrayList<TextField> textfields, Stage primaryStage) {
+		textfields.add(new TextField());
+		textfields.get(textfields.size()-1).setMaxWidth(50);
+		textfields.get(textfields.size()-1).setPrefHeight(21);
+		amount_fields++;
+		vbox.getChildren().add(textfields.get(amount_fields-1));
+		height+=35;
+		primaryStage.setHeight(height);
+	}
 	@Override
 	public void start(Stage primaryStage) {
 		primaryStage.getIcons().add(new Image(Main.class.getResourceAsStream("icon.png")));
 		try {
-			add = new Button("add");
 			front = new BorderPane();
+			scene = new Scene(front,40,height);
+			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
+			add = new Button("add");
 			botton_panel = new BorderPane();
 			go = new Button("GO");
 			result = new Label();
@@ -41,14 +52,11 @@ public class Main extends Application {
 			vbox.setPadding(new Insets(10));
 			vbox.setSpacing(8);
 			textfields = new ArrayList<>();
-			for(int i =0; i<amount_fields; i++) {
-				textfields.add(new TextField());
-				textfields.get(textfields.size()-1).setMaxWidth(50);
-				textfields.get(textfields.size()-1).setPrefHeight(21);
-				//vbox.setMargin(textfields[i],new Insets(0, 0, 0, 8));
-				vbox.getChildren().add(textfields.get(textfields.size()-1));
-			}
 			vbox.getChildren().add(add);
+			add_field(textfields,primaryStage);
+			add_field(textfields,primaryStage);
+			add_field(textfields,primaryStage);
+			add_field(textfields,primaryStage);
 			result.setText("jestem");
 			vbox.setSpacing(10);
 			front.setLeft(vbox);
@@ -58,10 +66,9 @@ public class Main extends Application {
 			botton_panel.setPadding(new Insets(9));
 			botton_panel.setRight(go);
 			front.setBottom(botton_panel);
-			scene = new Scene(front,40,230);
-			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 			primaryStage.setScene(scene);
 			primaryStage.show();
+			primaryStage.setResizable(false);
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
@@ -85,6 +92,16 @@ public class Main extends Application {
 				result.setText(text);
 			}
 		});
+		add.setOnAction(new EventHandler<ActionEvent>() {
+
+			@Override
+			public void handle(ActionEvent event) {
+				add_field(textfields,primaryStage);
+				
+			}
+			
+		});
+
 	}
 	
 	public static void main(String[] args) {
