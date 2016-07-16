@@ -12,22 +12,26 @@ import javafx.stage.Stage;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
 
 public class Main extends Application {
 	public int amount_fields = 0;
 	public int height = 110;
+	HBox top_options;
 	VBox vbox;
 	BorderPane botton_panel;
 	BorderPane front;
-	ArrayList<TextField> textfields;
+	ArrayList<TextField> textfields, values;
 	Scene scene;
 	Label result;
 	Button go, add;
+	RadioButton isValues;
 	private void add_field(ArrayList<TextField> textfields, Stage primaryStage) {
 		textfields.add(new TextField());
 		textfields.get(textfields.size()-1).setMaxWidth(50);
@@ -41,8 +45,11 @@ public class Main extends Application {
 	public void start(Stage primaryStage) {
 		primaryStage.getIcons().add(new Image(Main.class.getResourceAsStream("icon.png")));
 		try {
+			values = new ArrayList<>();
+			isValues = new RadioButton("Values");
+			top_options = new HBox();
 			front = new BorderPane();
-			scene = new Scene(front,40,height);
+			scene = new Scene(front,65,height);
 			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 			add = new Button("add");
 			botton_panel = new BorderPane();
@@ -52,7 +59,9 @@ public class Main extends Application {
 			vbox.setPadding(new Insets(10));
 			vbox.setSpacing(8);
 			textfields = new ArrayList<>();
-			vbox.getChildren().add(add);
+			top_options.getChildren().addAll(add,isValues);
+			top_options.setSpacing(16);
+			vbox.getChildren().add(top_options);
 			add_field(textfields,primaryStage);
 			add_field(textfields,primaryStage);
 			add_field(textfields,primaryStage);
@@ -100,6 +109,15 @@ public class Main extends Application {
 				
 			}
 			
+		});
+		isValues.setOnAction(new EventHandler<ActionEvent>() {
+
+			@Override
+			public void handle(ActionEvent event) {
+				if(isValues.isSelected()){
+					System.out.println("?");
+				}
+			}
 		});
 
 	}
