@@ -12,6 +12,8 @@ import javafx.stage.Stage;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.Menu;
+import javafx.scene.control.MenuBar;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
@@ -22,7 +24,8 @@ import javafx.scene.layout.VBox;
 
 public class Main extends Application {
 	public int amount_fields = 0;
-	public int height = 110;
+	public int height = 150;
+	MenuBar menubar;
 	HBox top_options;
 	VBox vbox;
 	BorderPane botton_panel;
@@ -85,6 +88,8 @@ public class Main extends Application {
 	public void start(Stage primaryStage) {
 		primaryStage.getIcons().add(new Image(Main.class.getResourceAsStream("icon.png")));
 		try {
+			menubar = new MenuBar();
+			menubar.getMenus().add(new Menu("gege"));
 			values = new ArrayList<>();
 			rows = new ArrayList<>();
 			isValues = new RadioButton("Values");
@@ -116,6 +121,7 @@ public class Main extends Application {
 			botton_panel.setPadding(new Insets(9));
 			botton_panel.setRight(go);
 			front.setBottom(botton_panel);
+			front.setTop(menubar);
 			primaryStage.setScene(scene);
 			primaryStage.show();
 			primaryStage.setResizable(false);
@@ -135,17 +141,29 @@ public class Main extends Application {
 						double for_values=0;
 						if ((textfields.get(i).getText() != null && !textfields.get(i).getText().isEmpty())){
 							System.out.println(textfields.get(i).getText());
-							try{for_now = Double.parseDouble(textfields.get(i).getText()); }
-							catch(NumberFormatException e) {
-									System.out.println("nie dziala");
-								}
+							String number = textfields.get(i).getText();
+							if (number == "") {
+								for_now =1;
+							}
+							else {
+								try{for_now = Double.parseDouble(number); }
+								catch(NumberFormatException e) {
+										System.out.println("nie dziala");
+									}
+							}
 						}
 						if ((values.get(i).getText() != null && !values.get(i).getText().isEmpty())){
 							System.out.println(values.get(i).getText());
-							try{for_values = Double.parseDouble(values.get(i).getText()); }
-							catch(NumberFormatException e) {
-									System.out.println("nie dziala");
-								}
+							String number = values.get(i).getText();
+							if(number =="") {
+								for_values = 0;
+							}
+							else {
+								try{for_values = Double.parseDouble(number); }
+								catch(NumberFormatException e) {
+										System.out.println("nie dziala");
+									}
+							}
 						}
 						marks[i] =  new Mark(for_now, for_values);
 					}
@@ -161,8 +179,13 @@ public class Main extends Application {
 							catch(NumberFormatException e) {
 									System.out.println("nie dziala");
 								}
+							marks[i] =  new Mark(for_now);
 						}
-						marks[i] =  new Mark(for_now);
+						else
+						{
+							marks[i] = new Mark(for_now, 0);
+						}
+						
 					}
 					text =String.valueOf(Average.Count_Average(marks)) ;
 				}
