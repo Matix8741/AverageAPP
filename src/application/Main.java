@@ -28,28 +28,69 @@ public class Main extends Application {
 	BorderPane botton_panel;
 	BorderPane front;
 	ArrayList<TextField> textfields, values;
+	ArrayList<HBox> rows;
 	Scene scene;
 	Label result;
 	Button go, add;
 	RadioButton isValues;
 	private void add_field(ArrayList<TextField> textfields, Stage primaryStage) {
+		rows.add(new HBox());
 		textfields.add(new TextField());
 		textfields.get(textfields.size()-1).setMaxWidth(50);
 		textfields.get(textfields.size()-1).setPrefHeight(21);
 		amount_fields++;
-		vbox.getChildren().add(textfields.get(amount_fields-1));
+		rows.get(amount_fields-1).getChildren().add(textfields.get(amount_fields-1));
+		vbox.getChildren().add(rows.get(amount_fields-1));
 		height+=35;
 		primaryStage.setHeight(height);
+	}
+	private void clear_values(ArrayList<TextField> values) {
+		for(int i =0; i<values.size();i++) {
+			rows.get(i).getChildren().remove(values.get(i));
+		}
+		
+	}
+	private void on_values(ArrayList<TextField> values) {
+		if(rows.size()==values.size()){
+			for(int i=0; i<rows.size();i++) {
+				rows.get(i).getChildren().add(values.get(i));
+				rows.get(i).setSpacing(10);
+			}
+			
+		}
+		else {
+			if(values.size()==0) {
+				for(int i=0; i<rows.size();i++) {
+					values.add(new TextField());
+					values.get(i).setMaxWidth(50);
+					values.get(i).setMaxHeight(21);
+					rows.get(i).getChildren().add(values.get(i));
+					rows.get(i).setSpacing(10);
+				}
+			}
+			else {
+				for(int i=values.size(); i<rows.size();i++) {
+					values.add(new TextField());
+					values.get(i).setMaxWidth(50);
+					values.get(i).setMaxHeight(21);
+				}
+				for(int i=0; i<rows.size();i++) {
+					rows.get(i).getChildren().add(values.get(i));
+					rows.get(i).setSpacing(10);
+				}
+			}
+		}
 	}
 	@Override
 	public void start(Stage primaryStage) {
 		primaryStage.getIcons().add(new Image(Main.class.getResourceAsStream("icon.png")));
 		try {
 			values = new ArrayList<>();
+			rows = new ArrayList<>();
 			isValues = new RadioButton("Values");
 			top_options = new HBox();
 			front = new BorderPane();
-			scene = new Scene(front,65,height);
+			scene = new Scene(front,160,height);
 			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 			add = new Button("add");
 			botton_panel = new BorderPane();
@@ -86,18 +127,45 @@ public class Main extends Application {
 			@Override
 			public void handle(ActionEvent event) {
 				Mark[] marks = new Mark[textfields.size()];
-				for(int i =0; i< marks.length;i++) {
-					double for_now=0;
-					if ((textfields.get(i).getText() != null && !textfields.get(i).getText().isEmpty())){
-						System.out.println(textfields.get(i).getText());
-						try{for_now = Double.parseDouble(textfields.get(i).getText()); }
-						catch(NumberFormatException e) {
-								System.out.println("nie dziala");
-							}
+				String text = "";
+				
+				if(isValues.isSelected()){
+					for(int i =0; i< marks.length;i++) {
+						double for_now=0;
+						double for_values=0;
+						if ((textfields.get(i).getText() != null && !textfields.get(i).getText().isEmpty())){
+							System.out.println(textfields.get(i).getText());
+							try{for_now = Double.parseDouble(textfields.get(i).getText()); }
+							catch(NumberFormatException e) {
+									System.out.println("nie dziala");
+								}
+						}
+						if ((values.get(i).getText() != null && !values.get(i).getText().isEmpty())){
+							System.out.println(values.get(i).getText());
+							try{for_values = Double.parseDouble(values.get(i).getText()); }
+							catch(NumberFormatException e) {
+									System.out.println("nie dziala");
+								}
+						}
+						marks[i] =  new Mark(for_now, for_values);
 					}
-					marks[i] =  new Mark(for_now);
+					System.out.println("lele" +marks[0].getValue());
+					text =String.valueOf(Average.Count_Average(marks)) ;
 				}
-				String text =String.valueOf(Average.Count_Average(marks)) ;
+				else {
+					for(int i =0; i< marks.length;i++) {
+						double for_now=0;
+						if ((textfields.get(i).getText() != null && !textfields.get(i).getText().isEmpty())){
+							System.out.println(textfields.get(i).getText());
+							try{for_now = Double.parseDouble(textfields.get(i).getText()); }
+							catch(NumberFormatException e) {
+									System.out.println("nie dziala");
+								}
+						}
+						marks[i] =  new Mark(for_now);
+					}
+					text =String.valueOf(Average.Count_Average(marks)) ;
+				}
 				result.setText(text);
 			}
 		});
@@ -115,9 +183,15 @@ public class Main extends Application {
 			@Override
 			public void handle(ActionEvent event) {
 				if(isValues.isSelected()){
-					System.out.println("?");
+					System.out.println("ee");
+					on_values(values);
+					//clear_values(values);
+				}
+				else {
+					clear_values(values);
 				}
 			}
+
 		});
 
 	}

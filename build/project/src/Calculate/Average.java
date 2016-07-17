@@ -5,7 +5,7 @@ public class Average {
 		double numerator = 0;
 		double denominator =0;
 		for(Mark mark : marks) {
-			numerator+=mark.getMark()*mark.getValue();
+			numerator+=mark.getMark();
 			denominator+=mark.getValue();
 		}
 		return (numerator/denominator);
